@@ -194,11 +194,12 @@ svg{display:block;width:100%;height:auto}
   cursor:pointer;
   transition:fill .15s;
 }
-.county:hover,.county:focus-visible{fill:var(--bgsu-gold);outline:none}
-.county.has-data{fill:#f8d9a0}
-.county.has-data:hover,.county.has-data:focus-visible{fill:var(--bgsu-gold)}
-.county.match{fill:#bcd9cd}
-.county.selected{fill:var(--bgsu-seafoam)}
+.county:hover,.county:focus-visible{fill:var(--bgsu-seafoam);outline:none}
+.county.has-data{fill:#c4ded4}
+.county.has-data:hover,.county.has-data:focus-visible{fill:var(--bgsu-seafoam)}
+.county.match{fill:var(--bgsu-teal)}
+.county.selected{fill:var(--bgsu-orange)}
+.county-label.lit{fill:#fff}
 .county-label{
   font-family:'Montserrat',sans-serif;
   font-size:10.5px;
@@ -209,8 +210,6 @@ svg{display:block;width:100%;height:auto}
   text-transform:uppercase;
   letter-spacing:.02em;
 }
-.county.selected + .county-label,
-g.sel-label .county-label{fill:#fff}
 .map-legend{
   display:flex;flex-wrap:wrap;gap:1rem;
   margin-top:.9rem;padding-top:.9rem;
@@ -220,6 +219,37 @@ g.sel-label .county-label{fill:#fff}
 }
 .map-legend span{display:flex;align-items:center;gap:.4rem}
 .swatch{width:14px;height:14px;border-radius:4px;border:1px solid var(--brown-line);display:inline-block}
+
+/* ---- out-of-state button ---- */
+#oosBtn{
+  display:none;
+  width:100%;
+  margin-top:1rem;
+  align-items:center;
+  justify-content:space-between;
+  gap:1rem;
+  font-family:'Montserrat',sans-serif;
+  background:var(--bgsu-teal);
+  color:#fff;
+  border:none;
+  border-radius:14px;
+  padding:1rem 1.3rem;
+  cursor:pointer;
+  text-align:left;
+  transition:background .15s;
+}
+#oosBtn:hover,#oosBtn:focus-visible{background:#174f58}
+#oosBtn[aria-pressed="true"]{background:var(--bgsu-orange)}
+#oosBtn .oos-main{
+  font-size:.82rem;font-weight:800;
+  letter-spacing:.14em;text-transform:uppercase;
+}
+#oosBtn .oos-count{
+  font-size:.72rem;font-weight:600;
+  letter-spacing:.08em;text-transform:uppercase;
+  color:rgba(255,255,255,.85);
+  white-space:nowrap;
+}
 
 /* ===================== RESULTS ===================== */
 .results-head{
@@ -257,6 +287,8 @@ g.sel-label .county-label{fill:#fff}
   color:#fff;background:var(--bgsu-teal);
   padding:.25em .75em;border-radius:999px;
 }
+.tag.oos-tag{background:var(--bgsu-orange)}
+.opp-card.is-oos{border-left-color:var(--bgsu-teal)}
 .empty,.loading-msg{
   background:var(--paper);
   border-radius:14px;
@@ -462,7 +494,7 @@ footer strong{color:var(--bgsu-gold);text-transform:uppercase;letter-spacing:.15
 <text class="county-label" x="438.3" y="469.4">Licking</text>
 <text class="county-label" x="207.5" y="397.6">Logan</text>
 <text class="county-label" x="497.2" y="185">Lorain</text>
-<text class="county-label" x="221.1" y="122.8">Lucas</text>
+<text class="county-label" x="221.1" y="110.8">Lucas</text>
 <text class="county-label" x="272.1" y="515.2">Madison</text>
 <text class="county-label" x="742.3" y="248.4">Mahoning</text>
 <text class="county-label" x="316.9" y="351.8">Marion</text>
@@ -506,11 +538,15 @@ footer strong{color:var(--bgsu-gold);text-transform:uppercase;letter-spacing:.15
 
       </svg>
       <div class="map-legend">
-        <span><span class="swatch" style="background:#f8d9a0"></span>Has opportunities</span>
-        <span><span class="swatch" style="background:var(--bgsu-seafoam)"></span>Selected</span>
-        <span><span class="swatch" style="background:#bcd9cd"></span>Search match</span>
+        <span><span class="swatch" style="background:#c4ded4"></span>Has opportunities</span>
+        <span><span class="swatch" style="background:var(--bgsu-orange)"></span>Selected</span>
+        <span><span class="swatch" style="background:var(--bgsu-teal)"></span>Search match</span>
       </div>
     </div>
+    <button id="oosBtn" type="button" aria-pressed="false">
+      <span class="oos-main">Beyond Ohio &mdash; Out-of-State Experiences</span>
+      <span class="oos-count"></span>
+    </button>
   </section>
 
   <section class="results-panel" aria-label="Service opportunities" aria-live="polite">
@@ -547,6 +583,14 @@ footer strong{color:var(--bgsu-gold);text-transform:uppercase;letter-spacing:.15
 const SHEET_ID = '1BeRr3CDbz8lM7Ihh2Awu6CMh64KhQz6U_mFvqWnr8lo';
 const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID + '/gviz/tq?tqx=out:csv';
 
+/* The exact name of the spreadsheet tab that holds out-of-state
+   experiences. If the tab is ever renamed, update it here too. */
+const OUT_OF_STATE_TAB_NAMES = ['Out of State'];
+function sheetTabURL(name){
+  return 'https://docs.google.com/spreadsheets/d/' + SHEET_ID +
+    '/gviz/tq?tqx=out:csv&sheet=' + encodeURIComponent(name);
+}
+
 /* From the Active Citizenship Continuum handout */
 const ISSUE_AREAS = [
   'Animal Welfare','Children & Youth','Community Enrichment','Education',
@@ -558,6 +602,7 @@ const COUNTY_NAMES = []; // filled below from the SVG
 let OPPORTUNITIES = [];  // {site, location, county, areas:[]}
 let selectedCounty = null;
 let activeIssue = null;
+let oosView = false;
 
 /* ---------- tiny CSV parser (handles quoted commas) ---------- */
 function parseCSV(text){
@@ -590,38 +635,70 @@ function extractCounty(location){
 }
 
 /* ---------- load the sheet ---------- */
+function rowsToOpportunities(rows, outOfState){
+  if (rows.length < 2) return [];
+  const headers = rows[0].map(h => h.toLowerCase());
+  const col = key => headers.findIndex(h => h.includes(key));
+  const iSite = col('volunteer') !== -1 ? col('volunteer') : col('site');
+  const iLoc  = col('location');
+  const iArea = col('service');
+  if (iSite === -1) return null; // not a recognizable tab
+  return rows.slice(1).map(r => {
+    const site = (r[iSite] || '').trim();
+    const location = (r[iLoc] || '').trim();
+    const areasRaw = (iArea !== -1 ? (r[iArea] || '') : '').trim();
+    if (!site) return null;
+    return {
+      site, location,
+      county: outOfState ? null : extractCounty(location),
+      outOfState: !!outOfState,
+      areas: areasRaw ? areasRaw.split(/[;,]/).map(a => a.trim()).filter(Boolean) : []
+    };
+  }).filter(Boolean);
+}
+
+async function fetchTab(url){
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('not reachable');
+  return parseCSV(await res.text()).filter(r => r.some(c => c.trim()));
+}
+
 async function loadSheet(){
-  const list = document.getElementById('resultsList');
   try{
-    const res = await fetch(SHEET_CSV_URL);
-    if (!res.ok) throw new Error('Sheet not reachable');
-    const rows = parseCSV(await res.text()).filter(r => r.some(c => c.trim()));
-    if (rows.length < 2){ renderIntro('empty-sheet'); return; }
+    const main = rowsToOpportunities(await fetchTab(SHEET_CSV_URL), false) || [];
 
-    const headers = rows[0].map(h => h.toLowerCase());
-    const col = key => headers.findIndex(h => h.includes(key));
-    const iSite = col('volunteer') !== -1 ? col('volunteer') : col('site');
-    const iLoc  = col('location');
-    const iArea = col('service');
+    // Try to find the out-of-state tab
+    let oos = [];
+    for (const name of OUT_OF_STATE_TAB_NAMES){
+      try{
+        const rows = await fetchTab(sheetTabURL(name));
+        const parsed = rowsToOpportunities(rows, true);
+        if (parsed === null) continue;
+        // guard: if Google fell back to the first tab, skip duplicates
+        const mainKeys = new Set(main.map(o => o.site + '|' + o.location));
+        const unique = parsed.filter(o => !mainKeys.has(o.site + '|' + o.location));
+        if (parsed.length && unique.length === 0) continue; // identical to main tab
+        oos = unique;
+        if (oos.length) break;
+      } catch(e){ /* try next name */ }
+    }
 
-    OPPORTUNITIES = rows.slice(1).map(r => {
-      const site = (r[iSite] || '').trim();
-      const location = (r[iLoc] || '').trim();
-      const areasRaw = (r[iArea] || '').trim();
-      if (!site) return null;
-      return {
-        site, location,
-        county: extractCounty(location),
-        areas: areasRaw ? areasRaw.split(/[;,]/).map(a => a.trim()).filter(Boolean) : []
-      };
-    }).filter(Boolean).sort((a,b) => a.site.localeCompare(b.site));
-
+    OPPORTUNITIES = main.concat(oos).sort((a,b) => a.site.localeCompare(b.site));
     markCountiesWithData();
     buildChips();
+    updateOOSButton();
     renderIntro(OPPORTUNITIES.length ? 'ready' : 'empty-sheet');
   } catch(e){
     renderIntro('error');
   }
+}
+
+function updateOOSButton(){
+  const btn = document.getElementById('oosBtn');
+  const count = OPPORTUNITIES.filter(o => o.outOfState).length;
+  btn.style.display = count ? 'flex' : 'none';
+  btn.querySelector('.oos-count').textContent =
+    count + (count === 1 ? ' experience' : ' experiences');
 }
 
 function markCountiesWithData(){
@@ -648,8 +725,9 @@ function renderIntro(state){
 }
 
 function cardHTML(o){
-  const tags = o.areas.map(a => '<span class="tag">' + escapeHTML(a) + '</span>').join('');
-  return '<article class="opp-card"><h3>' + escapeHTML(o.site) + '</h3>' +
+  let tags = o.areas.map(a => '<span class="tag">' + escapeHTML(a) + '</span>').join('');
+  if (o.outOfState) tags = '<span class="tag oos-tag">Out of State</span>' + tags;
+  return '<article class="opp-card' + (o.outOfState ? ' is-oos' : '') + '"><h3>' + escapeHTML(o.site) + '</h3>' +
     (o.location ? '<p class="loc">' + escapeHTML(o.location) + '</p>' : '') +
     (tags ? '<div class="tags">' + tags + '</div>' : '') + '</article>';
 }
@@ -665,7 +743,11 @@ function renderResults(){
   let titleText = 'Service Opportunities';
   let parts = [];
 
-  if (selectedCounty){
+  if (oosView){
+    items = items.filter(o => o.outOfState);
+    titleText = 'Out-of-State Experiences';
+    parts.push('Beyond Ohio');
+  } else if (selectedCounty){
     items = items.filter(o => o.county === selectedCounty);
     titleText = selectedCounty + ' County';
     parts.push(selectedCounty + ' County');
@@ -676,9 +758,9 @@ function renderResults(){
   }
 
   title.textContent = titleText;
-  clearBtn.style.display = (selectedCounty || activeIssue) ? 'inline' : 'none';
+  clearBtn.style.display = (selectedCounty || activeIssue || oosView) ? 'inline' : 'none';
 
-  if (!selectedCounty && !activeIssue){ renderIntro(OPPORTUNITIES.length ? 'ready' : 'empty-sheet'); return; }
+  if (!selectedCounty && !activeIssue && !oosView){ renderIntro(OPPORTUNITIES.length ? 'ready' : 'empty-sheet'); return; }
 
   sub.textContent = items.length + (items.length === 1 ? ' opportunity' : ' opportunities') +
     (parts.length ? ' \u00b7 ' + parts.join(' \u00b7 ') : '');
@@ -693,19 +775,37 @@ function renderResults(){
 /* ---------- county selection ---------- */
 function selectCounty(name, scroll){
   selectedCounty = (selectedCounty === name) ? null : name;
+  oosView = false;
   document.querySelectorAll('.county').forEach(el => {
     el.classList.toggle('selected', el.dataset.name === selectedCounty);
     el.setAttribute('aria-pressed', el.dataset.name === selectedCounty ? 'true' : 'false');
   });
+  refreshLabelColors();
   renderResults();
   if (scroll && selectedCounty && window.innerWidth <= 880){
     document.querySelector('.results-panel').scrollIntoView({behavior:'smooth', block:'start'});
   }
 }
 
+function toggleOOS(){
+  oosView = !oosView;
+  if (oosView){
+    selectedCounty = null;
+    document.querySelectorAll('.county').forEach(el => { el.classList.remove('selected'); el.setAttribute('aria-pressed','false'); });
+    refreshLabelColors();
+  }
+  document.getElementById('oosBtn').setAttribute('aria-pressed', oosView ? 'true' : 'false');
+  renderResults();
+  if (oosView && window.innerWidth <= 880){
+    document.querySelector('.results-panel').scrollIntoView({behavior:'smooth', block:'start'});
+  }
+}
+
 function clearAll(){
-  selectedCounty = null; activeIssue = null;
+  selectedCounty = null; activeIssue = null; oosView = false;
+  document.getElementById('oosBtn').setAttribute('aria-pressed','false');
   document.querySelectorAll('.county').forEach(el => el.classList.remove('selected','match'));
+  refreshLabelColors();
   document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
   document.getElementById('searchInput').value = '';
   renderResults();
@@ -751,6 +851,12 @@ function highlightIssueCounties(){
       o.areas.some(a => a.toLowerCase().includes(activeIssue.toLowerCase())));
     el.classList.toggle('match', !!match);
   });
+  refreshLabelColors();
+}
+function refreshLabelColors(){
+  const lit = new Set();
+  document.querySelectorAll('.county.selected,.county.match').forEach(el => lit.add(el.dataset.name));
+  document.querySelectorAll('.county-label').forEach(l => l.classList.toggle('lit', lit.has(l.dataset.name)));
 }
 
 /* ---------- search ---------- */
@@ -788,7 +894,8 @@ function buildSearch(){
           highlightIssueCounties(); renderResults();
         } else {
           input.value = it.label;
-          if (it.value.county) selectCounty(it.value.county, true);
+          if (it.value.outOfState){ if (!oosView) toggleOOS(); }
+          else if (it.value.county) selectCounty(it.value.county, true);
         }
       });
       box.appendChild(b);
@@ -821,6 +928,7 @@ function initMap(){
 }
 
 document.getElementById('clearBtn').addEventListener('click', clearAll);
+document.getElementById('oosBtn').addEventListener('click', toggleOOS);
 initMap();
 buildChips();
 buildSearch();
