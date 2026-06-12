@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ohio Service Opportunities | Thompson Scholarship Programs</title>
+<meta name="description" content="Find volunteer and service opportunities across all 88 Ohio counties. Thompson Scholarship Programs at BGSU — Connect, Engage, Serve.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Sacramento&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   BGSU OFFICIAL IDENTITY COLORS
+   https://www.bgsu.edu/marketing-and-communications/bgsu-graphic-standards-manual/the-official-identity-colors.html
+   ============================================================ */
+:root{
+  --bgsu-orange:#fd5000;
+  --bgsu-brown:#4f2c1d;
+  --bgsu-gold:#f5c163;
+  --bgsu-tan:#eae1d8;
+  --bgsu-seafoam:#80baac;
+  --bgsu-teal:#1c626d;
+  --paper:#fffdfa;
+  --brown-soft:rgba(79,44,29,.55);
+  --brown-line:rgba(79,44,29,.18);
+}
+
+/* ------------------------------------------------------------
+   BRITTANY FONT — the office's licensed main-title font.
+   Drop the font files (e.g. brittany.woff2) into a /fonts folder
+   next to this file and un-comment the block below.
+   Until then, the title falls back to Sacramento (free script).
+   ------------------------------------------------------------
+@font-face{
+  font-family:'Brittany';
+  src:url('fonts/brittany.woff2') format('woff2'),
+      url('fonts/brittany.woff') format('woff');
+  font-display:swap;
+}
+------------------------------------------------------------- */
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Montserrat',sans-serif;
+  background:var(--bgsu-tan);
+  color:var(--bgsu-brown);
+  line-height:1.55;
+  font-size:16px;
+}
+
+/* ===================== HEADER ===================== */
+header{
+  background:var(--bgsu-brown);
+  color:var(--paper);
+  padding:2.4rem 1.5rem 2.1rem;
+  text-align:center;
+  border-bottom:6px solid var(--bgsu-orange);
+}
+.eyebrow{
+  font-size:.72rem;
+  font-weight:700;
+  letter-spacing:.32em;
+  text-transform:uppercase;
+  color:var(--bgsu-gold);
+  margin-bottom:.4rem;
+}
+h1{
+  font-family:'Brittany','Sacramento',cursive;
+  font-weight:400;
+  font-size:clamp(2.6rem,6vw,4.2rem);
+  line-height:1.1;
+  color:#fff;
+}
+h1 .accent{color:var(--bgsu-orange)}
+.tagline{
+  font-size:.8rem;
+  font-weight:600;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,.75);
+  margin-top:.6rem;
+}
+.tagline span{color:var(--bgsu-orange);padding:0 .35em}
+
+/* ===================== SEARCH ===================== */
+.search-band{
+  background:var(--bgsu-brown);
+  padding:0 1.5rem 2.2rem;
+  display:flex;
+  justify-content:center;
+}
+.search-wrap{position:relative;width:100%;max-width:560px}
+.search-wrap input{
+  width:100%;
+  padding:.95rem 1.2rem .95rem 3rem;
+  font-family:'Montserrat',sans-serif;
+  font-size:1rem;
+  color:var(--bgsu-brown);
+  background:var(--paper);
+  border:none;
+  border-radius:999px;
+  outline:3px solid transparent;
+  transition:outline-color .15s;
+}
+.search-wrap input:focus{outline-color:var(--bgsu-orange)}
+.search-wrap input::placeholder{color:var(--brown-soft)}
+.search-icon{
+  position:absolute;left:1.1rem;top:50%;
+  transform:translateY(-50%);
+  width:18px;height:18px;pointer-events:none;
+}
+.suggestions{
+  position:absolute;top:calc(100% + 6px);left:0;right:0;
+  background:var(--paper);
+  border-radius:14px;
+  box-shadow:0 12px 30px rgba(79,44,29,.28);
+  overflow:hidden;
+  z-index:50;
+  display:none;
+  max-height:320px;
+  overflow-y:auto;
+}
+.suggestions.open{display:block}
+.suggestions button{
+  display:flex;align-items:center;gap:.6rem;
+  width:100%;text-align:left;
+  padding:.7rem 1.1rem;
+  border:none;background:none;cursor:pointer;
+  font-family:'Montserrat',sans-serif;
+  font-size:.92rem;color:var(--bgsu-brown);
+}
+.suggestions button:hover,
+.suggestions button:focus-visible{background:var(--bgsu-tan)}
+.suggestions .kind{
+  font-size:.6rem;font-weight:700;letter-spacing:.14em;
+  text-transform:uppercase;
+  padding:.18em .6em;border-radius:999px;flex-shrink:0;
+}
+.kind.county{background:var(--bgsu-orange);color:#fff}
+.kind.issue{background:var(--bgsu-teal);color:#fff}
+.kind.site{background:var(--bgsu-gold);color:var(--bgsu-brown)}
+
+/* ===================== LAYOUT ===================== */
+main{
+  max-width:1180px;
+  margin:0 auto;
+  padding:2.5rem 1.5rem 3rem;
+  display:grid;
+  grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);
+  gap:2.5rem;
+  align-items:start;
+}
+@media (max-width:880px){
+  main{grid-template-columns:1fr;gap:2rem}
+}
+
+/* ===================== MAP ===================== */
+.map-panel h2,.results-panel h2{
+  font-size:.95rem;
+  font-weight:800;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  margin-bottom:.35rem;
+}
+.panel-sub{
+  font-size:.85rem;
+  color:var(--brown-soft);
+  margin-bottom:1.1rem;
+}
+.map-frame{
+  background:var(--paper);
+  border-radius:18px;
+  padding:1rem;
+  box-shadow:0 8px 24px rgba(79,44,29,.12);
+  position:sticky;
+  top:1rem;
+}
+@media (max-width:880px){.map-frame{position:static}}
+svg{display:block;width:100%;height:auto}
+.county{
+  fill:var(--bgsu-tan);
+  stroke:var(--bgsu-brown);
+  stroke-width:1;
+  cursor:pointer;
+  transition:fill .15s;
+}
+.county:hover,.county:focus-visible{fill:var(--bgsu-gold);outline:none}
+.county.has-data{fill:#f8d9a0}
+.county.has-data:hover,.county.has-data:focus-visible{fill:var(--bgsu-gold)}
+.county.match{fill:var(--bgsu-seafoam)}
+.county.selected{fill:var(--bgsu-orange)}
+.county-label{
+  font-family:'Montserrat',sans-serif;
+  font-size:10.5px;
+  font-weight:600;
+  fill:var(--bgsu-brown);
+  text-anchor:middle;
+  pointer-events:none;
+  text-transform:uppercase;
+  letter-spacing:.02em;
+}
+.county.selected + .county-label,
+g.sel-label .county-label{fill:#fff}
+.map-legend{
+  display:flex;flex-wrap:wrap;gap:1rem;
+  margin-top:.9rem;padding-top:.9rem;
+  border-top:1px solid var(--brown-line);
+  font-size:.72rem;font-weight:600;
+  letter-spacing:.08em;text-transform:uppercase;
+}
+.map-legend span{display:flex;align-items:center;gap:.4rem}
+.swatch{width:14px;height:14px;border-radius:4px;border:1px solid var(--brown-line);display:inline-block}
+
+/* ===================== RESULTS ===================== */
+.results-head{
+  display:flex;align-items:baseline;justify-content:space-between;
+  gap:1rem;flex-wrap:wrap;
+}
+#clearBtn{
+  font-family:'Montserrat',sans-serif;
+  font-size:.7rem;font-weight:700;
+  letter-spacing:.14em;text-transform:uppercase;
+  color:var(--bgsu-orange);
+  background:none;border:none;cursor:pointer;
+  padding:.2rem 0;
+  display:none;
+}
+#clearBtn:hover{text-decoration:underline}
+.results-list{display:flex;flex-direction:column;gap:.9rem;margin-top:1.1rem}
+.opp-card{
+  background:var(--paper);
+  border-radius:14px;
+  border-left:5px solid var(--bgsu-orange);
+  padding:1rem 1.2rem;
+  box-shadow:0 3px 10px rgba(79,44,29,.08);
+}
+.opp-card h3{
+  font-size:1rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:.04em;
+  margin-bottom:.2rem;
+}
+.opp-card .loc{font-size:.85rem;color:var(--brown-soft)}
+.tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.55rem}
+.tag{
+  font-size:.66rem;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;
+  color:#fff;background:var(--bgsu-teal);
+  padding:.25em .75em;border-radius:999px;
+}
+.empty,.loading-msg{
+  background:var(--paper);
+  border-radius:14px;
+  padding:1.6rem 1.4rem;
+  text-align:center;
+  box-shadow:0 3px 10px rgba(79,44,29,.08);
+}
+.empty p:first-child{font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:.85rem}
+.empty p+p{font-size:.85rem;color:var(--brown-soft);margin-top:.4rem}
+
+/* ===================== ISSUE AREAS ===================== */
+.issues{margin-top:2rem;padding-top:1.4rem;border-top:1px solid var(--brown-line)}
+.issues h2{font-size:.8rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;margin-bottom:.7rem}
+.chips{display:flex;flex-wrap:wrap;gap:.45rem}
+.chip{
+  font-family:'Montserrat',sans-serif;
+  font-size:.7rem;font-weight:600;
+  letter-spacing:.06em;text-transform:uppercase;
+  color:var(--bgsu-brown);
+  background:var(--paper);
+  border:1.5px solid var(--brown-line);
+  border-radius:999px;
+  padding:.4em 1em;
+  cursor:pointer;
+  transition:all .15s;
+}
+.chip:hover{border-color:var(--bgsu-teal);color:var(--bgsu-teal)}
+.chip.active{background:var(--bgsu-teal);border-color:var(--bgsu-teal);color:#fff}
+
+/* ===================== FOOTER ===================== */
+footer{
+  background:var(--bgsu-brown);
+  color:rgba(255,255,255,.85);
+  text-align:center;
+  padding:1.8rem 1.5rem;
+  font-size:.8rem;
+  border-top:6px solid var(--bgsu-orange);
+}
+footer strong{color:var(--bgsu-gold);text-transform:uppercase;letter-spacing:.15em;font-size:.72rem}
+
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <p class="eyebrow">Thompson Scholarship Programs &middot; BGSU</p>
+  <h1>Serve <span class="accent">Ohio</span></h1>
+  <p class="tagline">Connect<span>&bull;</span>Engage<span>&bull;</span>Serve</p>
+</header>
+
+<div class="search-band">
+  <div class="search-wrap">
+    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="#4f2c1d" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
+    <input id="searchInput" type="search" placeholder="Search your county or a service issue area&hellip;" aria-label="Search counties, service issue areas, or volunteer sites" autocomplete="off">
+    <div class="suggestions" id="suggestions" role="listbox"></div>
+  </div>
+</div>
+
+<main>
+  <section class="map-panel" aria-label="Map of Ohio counties">
+    <h2>Find Your County</h2>
+    <p class="panel-sub">Click a county to see its service opportunities.</p>
+    <div class="map-frame">
+      <svg id="ohioMap" viewBox="0 0 800 880" role="group" aria-label="Clickable map of Ohio's 88 counties">
+        <path class="county" data-name="Adams" d="M213.061,806.823L213.185,797.491L220.186,717.031L231.378,717.375L272.95,709.313L286.107,710.248L293.933,718.838L293.794,812.777L285.81,816.765L282.578,808.011L275.341,803.073L256.85,798.828L246.997,792.226L229.743,796.486L223.646,807.57Z"/>
+<path class="county" data-name="Allen" d="M106.558,280.682L147.602,281.06L147.786,270.711L168.291,271.064L168.348,267.614L188.852,267.738L188.49,291.48L187.857,332.873L147.326,332.609L147.391,328.957L126.804,328.983L126.936,322.085L95.434,321.657L96.082,290.817L106.351,290.827Z"/>
+<path class="county" data-name="Ashland" d="M464.296,235.295L493.709,235.621L493.771,252.669L501.451,252.64L502.409,329.145L485.045,329.208L485.762,352.745L464.514,355.841L463.798,315.257L456.73,315.268L455.421,296.194L449.642,292.547L449.606,252.566L447.046,252.569L446.394,235.317Z"/>
+<path class="county" data-name="Ashtabula" d="M699.034,46.564L716.669,43.012L731.702,35.833L772.447,21.005L783.064,15.901L783.727,46.152L785.538,128.77L700.419,130.003L698.95,79.669Z"/>
+<path class="county" data-name="Athens" d="M473.53,632.362L475.445,611.461L495.735,613.022L497.617,591.713L517.883,592.841L516.028,614.355L554.655,616.352L553.57,647.604L560.157,651.41L559.553,658.312L577.277,658.981L576.728,671.565L571.543,679.926L534.081,678.367L477.571,674.956L478.828,653.854L472.268,653.464Z"/>
+<path class="county" data-name="Auglaize" d="M85.149,321.437L95.434,321.657L126.936,322.085L126.804,328.983L147.391,328.957L147.326,332.609L187.857,332.873L187.475,357.829L166.846,358.313L165.352,370.667L104.739,369.952L104.247,394.093L87.456,393.945L87.334,399.625L83.48,398.527Z"/>
+<path class="county" data-name="Belmont" d="M664.262,496.902L665.481,445.143L666.12,444.525L727.059,446.795L759.455,446.588L759.069,459.787L753.353,465.987L754.848,476.104L753.835,490.735L749.367,494.88L750.87,505.403L742.376,503.332L745.207,515.454L739.428,519.621L663.887,516.589Z"/>
+<path class="county" data-name="Brown" d="M149.374,774.805L162.494,660.788L185.437,662.977L183.313,716.308L220.186,717.031L213.185,797.491L213.061,806.823L201.848,803.626L198.682,793.436L188.837,788.017L186.956,781.09L176.458,775.857L163.314,771.184Z"/>
+<path class="county" data-name="Butler" d="M13.182,594.531L14.111,583.799L74.872,584.838L74.988,579.564L95.877,580.415L95.655,591.165L101.558,590.271L99.598,622.293L96.396,650.636L46.005,644.857L43.999,646.433L11.215,645.622Z"/>
+<path class="county" data-name="Carroll" d="M647.152,331.753L660.662,331.773L661.065,314.517L688.034,313.103L718.875,312.794L718.578,332.487L728.873,332.506L729.061,342.853L728.604,353.212L718.94,353.181L718.016,374.101L715.612,384.29L656.215,383.178L657.081,352.117L646.771,351.849Z"/>
+<path class="county" data-name="Champaign" d="M160.292,441.203L162.588,420.137L203.933,424.024L203.237,427.464L245.898,431.669L255.594,432.793L254,459.762L251.137,483.673L157.77,475.251Z"/>
+<path class="county" data-name="Clark" d="M153.877,512.927L157.77,475.251L251.137,483.673L252.435,483.687L237.464,540.527L227.053,539.384L193.916,533.045L194.653,527.172L173.845,525.433L173.904,521.781L153.758,519.824Z"/>
+<path class="county" data-name="Clermont" d="M113.35,656.048L159.869,660.745L162.494,660.788L149.374,774.805L119.792,766.153L116.591,760.816L116.805,749.66L115.602,743.549L106.626,730.386L101.668,714.663L105.68,678.623L110.414,671.818L101.971,666.983Z"/>
+<path class="county" data-name="Clinton" d="M159.869,660.745L166.334,586.589L222.464,591.875L239.44,593.506L236.353,632.627L200.588,659.345L195.2,668.803L185.437,662.977L162.494,660.788Z"/>
+<path class="county" data-name="Columbiana" d="M687.393,272.114L721.36,271.75L721.238,264.851L734.689,264.607L734.817,271.506L788.643,270.416L788.897,281.981L790,332.296L778.538,338.024L769.525,338.009L763.895,346.04L749.728,346.118L749.665,342.872L729.061,342.853L728.873,332.506L718.578,332.487L718.875,312.794L688.034,313.103Z"/>
+<path class="county" data-name="Coshocton" d="M491.65,379.105L577.47,381.42L576.977,398.876L594.421,399.323L593.467,434.03L585.048,433.704L585.205,450.746L576.778,450.416L491.887,447.483L492.476,430.64L489.887,430.446Z"/>
+<path class="county" data-name="Crawford" d="M326.078,252L372.16,252.246L376.644,251.451L395.204,251.711L394.394,318.884L371.258,318.606L371.251,320.432L325.613,320.593Z"/>
+<path class="county" data-name="Cuyahoga" d="M529.537,130.909L545.455,136.289L557.505,133.156L570.226,134.881L588.533,122.331L606.757,104.685L613.688,100.548L614.486,115.158L631.62,114.956L631.627,167.337L595.33,167.132L601.239,184.327L580.208,184.734L545.793,185.414L545.67,167.551L529.115,167.454Z"/>
+<path class="county" data-name="Darke" d="M16.226,501.254L17.411,480.38L18.158,451.174L20.545,408.409L20.799,398.47L87.334,399.625L86.539,436.747L86.436,502.294L75.382,502.257Z"/>
+<path class="county" data-name="Defiance" d="M27.267,144.866L108.655,146.531L129.007,146.731L127.822,208.632L107.392,208.431L107.603,198.081L87.191,197.651L87.42,187.099L26.222,185.858L26.33,181.596Z"/>
+<path class="county" data-name="Delaware" d="M300.68,381.689L341.314,384.207L341.293,387.859L358.716,388.762L358.007,402.151L390.948,404.303L390.254,421.548L388.21,457.252L314.348,452.814L313.878,428.868L300.29,428.761Z"/>
+<path class="county" data-name="Erie" d="M393.657,108.192L403.813,104.764L402.53,112.07ZM355.427,142.357L378.97,136.164L392.945,137.831L400.579,133.992L414.536,149.648L424.707,156.357L438.705,160.624L462.234,149.639L462.929,183.741L374.347,182.229L373.837,148.935L354.758,149.053Z"/>
+<path class="county" data-name="Fairfield" d="M376.262,535.325L380.192,528.644L384.184,501.267L440.08,504.795L442.03,503.374L440.086,525.489L453.756,526.494L452.476,547.392L459.646,547.789L458.372,568.484L436.836,566.877L436.184,580.876L413.98,579.442L413.313,589.991L393.059,588.734L393.05,592.183L372.796,590.496Z"/>
+<path class="county" data-name="Fayette" d="M225.582,552.553L298.563,558.396L295.596,600.571L275.661,633.257L236.353,632.627L239.44,593.506L222.464,591.875Z"/>
+<path class="county" data-name="Franklin" d="M307.802,461.083L314.284,461.335L314.348,452.814L388.21,457.252L384.184,501.267L380.192,528.644L376.262,535.325L300.095,530.816L298.999,506.054L303.579,502.44L299.753,493.481L298.608,475.008L306.395,475.072Z"/>
+<path class="county" data-name="Fulton" d="M99.867,80.555L106.836,80.497L191.741,78.772L190.265,133.777L108.937,132.73L109.074,126.031L102.724,125.901L102.597,101.53L100.06,101.477Z"/>
+<path class="county" data-name="Gallia" d="M421.669,759.809L421.671,757.78L443.456,759.812L447.385,714.973L467.8,716.569L467.806,720.018L509.311,722.319L508.699,732.871L500.845,747.106L500.899,760.699L487.067,771.298L493.748,792.579L495.807,813.064L487.217,819.586L474.633,821.649L460.716,821.068L462.007,799.762L440.167,798.159L441.485,784.16L438.178,777.059L420.335,775.43Z"/>
+<path class="county" data-name="Geauga" d="M631.62,114.956L648.119,114.745L647.894,97.895L682.125,97.402L681.857,80.145L698.95,79.669L700.419,130.003L701.022,166.336L631.627,167.337Z"/>
+<path class="county" data-name="Greene" d="M153.758,519.824L173.904,521.781L173.845,525.433L194.653,527.172L193.916,533.045L227.053,539.384L225.582,552.553L222.464,591.875L166.334,586.589L141.544,584.135L141.751,572.573L146.547,522.742Z"/>
+<path class="county" data-name="Guernsey" d="M576.778,450.416L585.205,450.746L585.048,433.704L593.467,434.03L644.621,435.076L644.749,445.017L665.481,445.143L664.262,496.902L636.974,497.465L637.059,504.362L623.401,503.916L622.83,510.822L602.011,510.235L602.154,524.234L581.319,523.621L581.783,502.719L574.631,502.579Z"/>
+<path class="county" data-name="Hamilton" d="M11.215,645.622L43.999,646.433L46.005,644.857L96.396,650.636L113.429,651.991L113.35,656.048L101.971,666.983L110.414,671.818L105.68,678.623L101.668,714.663L81.426,706.328L79.095,692.277L73.87,690.54L67.813,696.697L59.286,695.491L45.995,701.069L36.264,695.155L26.67,683.962L22.079,683.442L10,692.877Z"/>
+<path class="county" data-name="Hancock" d="M189.746,209.292L271.454,210.536L271.031,251.939L264.631,251.872L264.524,262.019L260.681,261.978L260.569,272.328L254.16,272.257L253.93,292.753L188.49,291.48L188.852,267.738Z"/>
+<path class="county" data-name="Hardin" d="M188.49,291.48L253.93,292.753L257.139,292.789L256.834,320.386L267.12,320.294L270.297,323.979L270.505,366.8L251.807,367.005L251.821,365.788L187.451,359.453L187.475,357.829L187.857,332.873Z"/>
+<path class="county" data-name="Harrison" d="M644.621,435.076L644.993,413.765L655.986,413.822L656.215,383.178L715.612,384.29L729.17,384.456L727.059,446.795L666.12,444.525L665.481,445.143L644.749,445.017Z"/>
+<path class="county" data-name="Henry" d="M108.937,132.73L190.265,133.777L190,151.031L189.746,209.292L127.822,208.632L129.007,146.731L108.655,146.531Z"/>
+<path class="county" data-name="Highland" d="M185.437,662.977L195.2,668.803L200.588,659.345L236.353,632.627L275.661,633.257L272.129,659.192L280.621,663.331L279.192,675.694L272.95,709.313L231.378,717.375L220.186,717.031L183.313,716.308Z"/>
+<path class="county" data-name="Hocking" d="M391.035,612.465L393.05,592.183L393.059,588.734L413.313,589.991L413.98,579.442L436.184,580.876L436.836,566.877L458.372,568.484L457.085,582.282L478.643,583.659L478.007,590.356L497.617,591.713L495.735,613.022L475.445,611.461L473.53,632.362L432.911,629.769L432.255,635.855L410.633,634.417L410.628,637.866L389.66,636.198Z"/>
+<path class="county" data-name="Holmes" d="M502.409,329.145L587.297,328.57L588.013,336.275L584.158,336.92L584.569,381.56L577.47,381.42L491.65,379.105L492.842,351.504L485.762,352.745L485.045,329.208Z"/>
+<path class="county" data-name="Huron" d="M374.347,182.229L462.929,183.741L464.296,235.295L446.394,235.317L447.046,252.569L395.204,251.711L376.644,251.451L374.953,190.351Z"/>
+<path class="county" data-name="Jackson" d="M382.958,683.246L386.929,673.926L407.944,675.394L407.282,678.436L428.305,680.487L427.644,689.007L449.339,690.626L447.385,714.973L443.456,759.812L421.671,757.78L421.669,759.809L407.806,758.777L387.345,757.311L388.725,736.012L378.838,735.373Z"/>
+<path class="county" data-name="Jefferson" d="M729.061,342.853L749.665,342.872L749.728,346.118L763.895,346.04L771.208,357.053L777.365,373.973L771.897,390.324L775.894,396.126L777.429,407.662L774.472,420.915L768.1,425.714L763.207,439.816L759.455,446.588L727.059,446.795L729.17,384.456L715.612,384.29L718.016,374.101L718.94,353.181L728.604,353.212Z"/>
+<path class="county" data-name="Knox" d="M390.948,404.303L409.036,405.56L409.758,357.065L412.979,357.07L457.43,356.867L464.514,355.841L485.762,352.745L492.842,351.504L491.65,379.105L489.887,430.446L439.41,428.914L439.409,424.45L390.254,421.548Z"/>
+<path class="county" data-name="Lake" d="M613.688,100.548L621.816,90.708L649.416,69.649L655.741,69.36L679.584,55.811L699.034,46.564L698.95,79.669L681.857,80.145L682.125,97.402L647.894,97.895L648.119,114.745L631.62,114.956L614.486,115.158Z"/>
+<path class="county" data-name="Lawrence" d="M377.21,824.435L391.145,818.188L385.878,807.014L386.564,798.698L397.151,799.334L399.174,782.093L405.122,782.713L407.806,758.777L421.669,759.809L420.335,775.43L438.178,777.059L441.485,784.16L440.167,798.159L462.007,799.762L460.716,821.068L474.633,821.649L471.366,843.367L468.068,853.316L452.8,855.571L433.543,862.276L425.57,864.099L417.603,859.629L413.634,846.638L404.355,839.928L393.772,827.528Z"/>
+<path class="county" data-name="Licking" d="M388.21,457.252L390.254,421.548L439.409,424.45L439.41,428.914L489.887,430.446L492.476,430.64L491.887,447.483L489.466,498.619L483.617,498.435L483.643,507.362L449.832,505.398L442.03,503.374L440.08,504.795L384.184,501.267Z"/>
+<path class="county" data-name="Logan" d="M165.352,370.667L166.846,358.313L187.475,357.829L187.451,359.453L251.821,365.788L251.807,367.005L245.898,431.669L203.237,427.464L203.933,424.024L162.588,420.137L164.684,410.838Z"/>
+<path class="county" data-name="Lorain" d="M462.234,149.639L478.765,148.181L489.551,141.043L521.902,128.719L529.537,130.909L529.115,167.454L545.67,167.551L545.793,185.414L529.221,185.52L528.688,203.386L511.459,203.477L510.891,218.297L494.285,218.366L493.709,235.621L464.296,235.295L462.929,183.741Z"/>
+<path class="county" data-name="Lucas" d="M190.265,133.777L191.741,78.772L212.646,78.265L267.12,76.7L267.698,81.985L280.942,87.805L289.209,84.431L305.569,97.77L317.575,103.142L273.177,103.768L245.904,103.874L238.793,114.752L222.162,124.488L220.778,132.997L214.338,139.203L190,151.031Z"/>
+<path class="county" data-name="Madison" d="M227.053,539.384L237.464,540.527L252.435,483.687L251.137,483.673L254,459.762L307.802,461.083L306.395,475.072L298.608,475.008L299.753,493.481L303.579,502.44L298.999,506.054L300.095,530.816L298.563,558.396L225.582,552.553Z"/>
+<path class="county" data-name="Mahoning" d="M687.073,251.619L702.436,251.574L701.86,216.872L787.438,215.427L787.483,217.456L788.643,270.416L734.817,271.506L734.689,264.607L721.238,264.851L721.36,271.75L687.393,272.114Z"/>
+<path class="county" data-name="Marion" d="M270.297,323.979L290.869,324.176L290.902,320.523L325.613,320.593L371.251,320.432L370.553,334.229L353.171,336.585L352.997,370.878L342.673,372.243L341.314,384.207L300.68,381.689L300.804,366.674L270.505,366.8Z"/>
+<path class="county" data-name="Medina" d="M493.709,235.621L494.285,218.366L510.891,218.297L511.459,203.477L528.688,203.386L529.221,185.52L545.793,185.414L580.208,184.734L580.185,252.935L501.451,252.64L493.771,252.669Z"/>
+<path class="county" data-name="Meigs" d="M467.8,716.569L470.344,674.568L477.571,674.956L534.081,678.367L571.543,679.926L573.024,700L561.208,703.34L563.249,712.048L569.88,717.879L567.426,740.42L561.452,735.394L555.548,739.496L553.631,748.031L543.757,751.547L540.423,746.091L545.662,740.376L537.65,724.399L530.402,724.24L521.795,716.172L508.699,732.871L509.311,722.319L467.806,720.018Z"/>
+<path class="county" data-name="Mercer" d="M22.123,346.542L23.06,309.824L85.369,311.293L85.149,321.437L83.48,398.527L87.334,399.625L20.799,398.47Z"/>
+<path class="county" data-name="Miami" d="M86.539,436.747L125.394,436.924L160.292,441.203L157.77,475.251L153.877,512.927L135.038,511.375L135.201,502.449L86.436,502.294Z"/>
+<path class="county" data-name="Monroe" d="M663.887,516.589L739.428,519.621L739.003,531.804L731.365,541.684L738.037,550.084L732.295,557.088L729.989,573.971L718.294,577.423L701.573,593.53L701.448,585.821L663.533,584.768L656.916,578.569L656.593,554.632L650.072,554.718L650.22,516.369Z"/>
+<path class="county" data-name="Montgomery" d="M75.382,502.257L86.436,502.294L135.201,502.449L135.038,511.375L153.877,512.927L153.758,519.824L146.547,522.742L141.751,572.573L141.544,584.135L95.877,580.415L74.988,579.564Z"/>
+<path class="county" data-name="Morgan" d="M512.41,540.93L580.851,544.117L591.281,544.427L590.827,565.329L601.271,565.632L601.453,583.687L577.945,584.72L576.745,597.106L580.013,597.078L579.464,609.053L558.505,605.977L554.655,616.352L516.028,614.355L517.883,592.841L521.589,551.84L511.805,551.077Z"/>
+<path class="county" data-name="Morrow" d="M341.314,384.207L342.673,372.243L352.997,370.878L353.171,336.585L370.553,334.229L371.251,320.432L371.258,318.606L394.394,318.884L412.388,319.528L412.979,357.07L409.758,357.065L409.036,405.56L390.948,404.303L358.007,402.151L358.716,388.762L341.293,387.859Z"/>
+<path class="county" data-name="Muskingum" d="M491.887,447.483L576.778,450.416L574.631,502.579L581.783,502.719L581.319,523.621L580.851,544.117L512.41,540.93L513.01,530.175L494.776,529.237L496.651,508.333L483.643,507.362L483.617,498.435L489.466,498.619Z"/>
+<path class="county" data-name="Noble" d="M581.319,523.621L602.154,524.234L602.011,510.235L622.83,510.822L623.401,503.916L637.059,504.362L636.974,497.465L664.262,496.902L663.887,516.589L650.22,516.369L650.072,554.718L656.593,554.632L656.916,578.569L656.306,581.824L636.031,579.852L632.683,572.994L622.197,569.465L622.366,584.274L601.453,583.687L601.271,565.632L590.827,565.329L591.281,544.427L580.851,544.117Z"/>
+<path class="county" data-name="Ottawa" d="M374.667,97.776L378.536,79.517L385.479,86.646L383.555,93.747L374.65,102.243ZM273.177,103.768L317.575,103.142L335.289,109.76L346.634,123.227L358.669,129.177L370.121,124.558L371.431,114.412L375.883,111.79L384.73,122.987L396.794,122.615L400.579,133.992L392.945,137.831L378.97,136.164L355.427,142.357L286.773,142.07L286.87,131.717L273.527,131.791Z"/>
+<path class="county" data-name="Paulding" d="M26.222,185.858L87.42,187.099L87.191,197.651L107.603,198.081L107.392,208.431L106.551,249.624L96.308,249.615L24.633,248.149Z"/>
+<path class="county" data-name="Perry" d="M442.03,503.374L449.832,505.398L483.643,507.362L496.651,508.333L494.776,529.237L513.01,530.175L512.41,540.93L511.805,551.077L521.589,551.84L517.883,592.841L497.617,591.713L478.007,590.356L478.643,583.659L457.085,582.282L458.372,568.484L459.646,547.789L452.476,547.392L453.756,526.494L440.086,525.489Z"/>
+<path class="county" data-name="Pickaway" d="M298.563,558.396L300.095,530.816L376.262,535.325L372.796,590.496L393.05,592.183L391.035,612.465L344.59,609.638L345.278,603.352L295.596,600.571Z"/>
+<path class="county" data-name="Pike" d="M279.192,675.694L382.958,683.246L378.838,735.373L343.25,733.185L304.367,732.112L303.767,724.6L293.933,718.838L286.107,710.248L272.95,709.313Z"/>
+<path class="county" data-name="Portage" d="M631.627,167.337L701.022,166.336L701.86,216.872L702.436,251.574L687.073,251.619L632.67,252.377Z"/>
+<path class="county" data-name="Preble" d="M15.073,546.279L16.226,501.254L75.382,502.257L74.988,579.564L74.872,584.838L14.111,583.799Z"/>
+<path class="county" data-name="Putnam" d="M96.308,249.615L106.551,249.624L107.392,208.431L127.822,208.632L189.746,209.292L188.852,267.738L168.348,267.614L168.291,271.064L147.786,270.711L147.602,281.06L106.558,280.682L106.769,270.334L96.517,270.122Z"/>
+<path class="county" data-name="Richland" d="M395.204,251.711L447.046,252.569L449.606,252.566L449.642,292.547L455.421,296.194L456.73,315.268L463.798,315.257L464.514,355.841L457.43,356.867L412.979,357.07L412.388,319.528L394.394,318.884Z"/>
+<path class="county" data-name="Ross" d="M275.661,633.257L295.596,600.571L345.278,603.352L344.59,609.638L391.035,612.465L389.66,636.198L386.929,673.926L382.958,683.246L279.192,675.694L280.621,663.331L272.129,659.192Z"/>
+<path class="county" data-name="Sandusky" d="M273.527,131.791L286.87,131.717L286.773,142.07L355.427,142.357L354.758,149.053L373.837,148.935L374.347,182.229L374.953,190.351L332.876,189.731L302.265,190.522L271.663,190.036Z"/>
+<path class="county" data-name="Scioto" d="M293.933,718.838L303.767,724.6L304.367,732.112L343.25,733.185L378.838,735.373L388.725,736.012L387.345,757.311L407.806,758.777L405.122,782.713L399.174,782.093L397.151,799.334L386.564,798.698L385.878,807.014L391.145,818.188L377.21,824.435L371.266,818.732L365.398,796.188L367.419,787.269L362.819,780.554L348.904,786.98L338.984,786.926L334.983,792.38L321.028,801.623L317.655,810.527L293.794,812.777Z"/>
+<path class="county" data-name="Seneca" d="M271.454,210.536L271.663,190.036L302.265,190.522L332.876,189.731L374.953,190.351L376.644,251.451L372.16,252.246L326.078,252L271.031,251.939Z"/>
+<path class="county" data-name="Shelby" d="M87.334,399.625L87.456,393.945L104.247,394.093L104.739,369.952L165.352,370.667L164.684,410.838L162.588,420.137L160.292,441.203L125.394,436.924L86.539,436.747Z"/>
+<path class="county" data-name="Stark" d="M587.297,328.57L587.39,270.324L627.78,271.718L628.189,252.432L632.67,252.377L687.073,251.619L687.393,272.114L688.034,313.103L661.065,314.517L660.662,331.773L647.152,331.753L620.126,331.07L588.013,336.275Z"/>
+<path class="county" data-name="Summit" d="M580.208,184.734L601.239,184.327L595.33,167.132L631.627,167.337L632.67,252.377L628.189,252.432L627.78,271.718L587.39,270.324L587.226,252.87L580.185,252.935Z"/>
+<path class="county" data-name="Trumbull" d="M701.022,166.336L700.419,130.003L785.538,128.77L785.596,131.408L787.684,197.555L787.438,215.427L701.86,216.872Z"/>
+<path class="county" data-name="Tuscarawas" d="M577.47,381.42L584.569,381.56L584.158,336.92L588.013,336.275L620.126,331.07L647.152,331.753L646.771,351.849L657.081,352.117L656.215,383.178L655.986,413.822L644.993,413.765L644.621,435.076L593.467,434.03L594.421,399.323L576.977,398.876Z"/>
+<path class="county" data-name="Union" d="M251.807,367.005L270.505,366.8L300.804,366.674L300.68,381.689L300.29,428.761L313.878,428.868L314.348,452.814L314.284,461.335L307.802,461.083L254,459.762L255.594,432.793L245.898,431.669Z"/>
+<path class="county" data-name="Van Wert" d="M24.633,248.149L96.308,249.615L96.517,270.122L106.769,270.334L106.558,280.682L106.351,290.827L96.082,290.817L95.434,321.657L85.149,321.437L85.369,311.293L23.06,309.824L24.234,263.771Z"/>
+<path class="county" data-name="Vinton" d="M389.66,636.198L410.628,637.866L410.633,634.417L432.255,635.855L432.911,629.769L473.53,632.362L472.268,653.464L478.828,653.854L477.571,674.956L470.344,674.568L467.8,716.569L447.385,714.973L449.339,690.626L427.644,689.007L428.305,680.487L407.282,678.436L407.944,675.394L386.929,673.926Z"/>
+<path class="county" data-name="Warren" d="M95.877,580.415L141.544,584.135L166.334,586.589L159.869,660.745L113.35,656.048L113.429,651.991L96.396,650.636L99.598,622.293L101.558,590.271L95.655,591.165Z"/>
+<path class="county" data-name="Washington" d="M554.655,616.352L558.505,605.977L579.464,609.053L580.013,597.078L576.745,597.106L577.945,584.72L601.453,583.687L622.366,584.274L622.197,569.465L632.683,572.994L636.031,579.852L656.306,581.824L656.916,578.569L663.533,584.768L701.448,585.821L701.573,593.53L689.999,606.09L686.837,613.24L677.738,617.637L670.695,628.696L659.582,630.474L641.369,641.059L629.386,625.582L623.503,626.665L607.291,642.262L605.498,659.12L585.142,657.897L583.274,669.073L576.728,671.565L577.277,658.981L559.553,658.312L560.157,651.41L553.57,647.604Z"/>
+<path class="county" data-name="Wayne" d="M501.451,252.64L580.185,252.935L587.226,252.87L587.39,270.324L587.297,328.57L502.409,329.145Z"/>
+<path class="county" data-name="Williams" d="M28.259,81.121L99.867,80.555L100.06,101.477L102.597,101.53L102.724,125.901L109.074,126.031L108.937,132.73L108.655,146.531L27.267,144.866L27.259,120.293Z"/>
+<path class="county" data-name="Wood" d="M190,151.031L214.338,139.203L220.778,132.997L222.162,124.488L238.793,114.752L245.904,103.874L273.177,103.768L273.527,131.791L271.663,190.036L271.454,210.536L189.746,209.292Z"/>
+<path class="county" data-name="Wyandot" d="M271.031,251.939L326.078,252L325.613,320.593L290.902,320.523L290.869,324.176L270.297,323.979L267.12,320.294L256.834,320.386L257.139,292.789L253.93,292.753L254.16,272.257L260.569,272.328L260.681,261.978L264.524,262.019L264.631,251.872Z"/>
+<text class="county-label" x="256.5" y="762.7">Adams</text>
+<text class="county-label" x="148" y="306.2">Allen</text>
+<text class="county-label" x="476.1" y="297.2">Ashland</text>
+<text class="county-label" x="744.1" y="84.6">Ashtabula</text>
+<text class="county-label" x="518.3" y="648.1">Athens</text>
+<text class="county-label" x="126.2" y="355.5">Auglaize</text>
+<text class="county-label" x="708.8" y="485">Belmont</text>
+<text class="county-label" x="184" y="740.9">Brown</text>
+<text class="county-label" x="56.7" y="619.2">Butler</text>
+<text class="county-label" x="688.3" y="352.3">Carroll</text>
+<text class="county-label" x="206" y="456.9">Champaign</text>
+<text class="county-label" x="202.7" y="509.1">Clark</text>
+<text class="county-label" x="132.1" y="713.2">Clermont</text>
+<text class="county-label" x="196.7" y="627.5">Clinton</text>
+<text class="county-label" x="743.4" y="306.6">Columbiana</text>
+<text class="county-label" x="539.7" y="419.3">Coshocton</text>
+<text class="county-label" x="360.2" y="289.9">Crawford</text>
+<text class="county-label" x="584.2" y="153.8">Cuyahoga</text>
+<text class="county-label" x="52.6" y="454.9">Darke</text>
+<text class="county-label" x="82.1" y="174.4">Defiance</text>
+<text class="county-label" x="344.4" y="425">Delaware</text>
+<text class="county-label" x="410.4" y="166.6">Erie</text>
+<text class="county-label" x="411.8" y="550.1">Fairfield</text>
+<text class="county-label" x="261.2" y="593.9">Fayette</text>
+<text class="county-label" x="343.3" y="498.2">Franklin</text>
+<text class="county-label" x="147.1" y="110">Fulton</text>
+<text class="county-label" x="469" y="768.8">Gallia</text>
+<text class="county-label" x="669" y="135.1">Geauga</text>
+<text class="county-label" x="182.6" y="561.9">Greene</text>
+<text class="county-label" x="617.1" y="477.8">Guernsey</text>
+<text class="county-label" x="61.5" y="676.8">Hamilton</text>
+<text class="county-label" x="227.3" y="253.1">Hancock</text>
+<text class="county-label" x="227.5" y="333.5">Hardin</text>
+<text class="county-label" x="689.1" y="419.7">Harrison</text>
+<text class="county-label" x="156.9" y="173.5">Henry</text>
+<text class="county-label" x="233.7" y="682.5">Highland</text>
+<text class="county-label" x="439" y="609.8">Hocking</text>
+<text class="county-label" x="537.4" y="358.1">Holmes</text>
+<text class="county-label" x="417.8" y="220.1">Huron</text>
+<text class="county-label" x="413.5" y="722.4">Jackson</text>
+<text class="county-label" x="742.3" y="397">Jefferson</text>
+<text class="county-label" x="449" y="396.6">Knox</text>
+<text class="county-label" x="652.2" y="90.6">Lake</text>
+<text class="county-label" x="428.5" y="821.7">Lawrence</text>
+<text class="county-label" x="438.3" y="469.4">Licking</text>
+<text class="county-label" x="207.5" y="397.6">Logan</text>
+<text class="county-label" x="497.2" y="185">Lorain</text>
+<text class="county-label" x="231.1" y="106.8">Lucas</text>
+<text class="county-label" x="272.1" y="515.2">Madison</text>
+<text class="county-label" x="742.3" y="248.4">Mahoning</text>
+<text class="county-label" x="316.9" y="351.8">Marion</text>
+<text class="county-label" x="542.2" y="226.6">Medina</text>
+<text class="county-label" x="522.2" y="707.4">Meigs</text>
+<text class="county-label" x="53.2" y="358.8">Mercer</text>
+<text class="county-label" x="122.7" y="475.2">Miami</text>
+<text class="county-label" x="692.7" y="553.4">Monroe</text>
+<text class="county-label" x="116" y="555.8">Montgomery</text>
+<text class="county-label" x="552.9" y="580.1">Morgan</text>
+<text class="county-label" x="382.5" y="367.1">Morrow</text>
+<text class="county-label" x="535.7" y="498.8">Muskingum</text>
+<text class="county-label" x="624.7" y="545.2">Noble</text>
+<text class="county-label" x="333.3" y="129.7">Ottawa</text>
+<text class="county-label" x="64.9" y="223">Paulding</text>
+<text class="county-label" x="483.1" y="552.9">Perry</text>
+<text class="county-label" x="339.9" y="575.4">Pickaway</text>
+<text class="county-label" x="331.4" y="708.6">Pike</text>
+<text class="county-label" x="666.9" y="213.4">Portage</text>
+<text class="county-label" x="41.2" y="539.2">Preble</text>
+<text class="county-label" x="144.4" y="246.9">Putnam</text>
+<text class="county-label" x="428.6" y="308">Richland</text>
+<text class="county-label" x="333.3" y="647.1">Ross</text>
+<text class="county-label" x="320.9" y="170">Sandusky</text>
+<text class="county-label" x="344.7" y="773.2">Scioto</text>
+<text class="county-label" x="323.6" y="225.2">Seneca</text>
+<text class="county-label" x="128.4" y="409.7">Shelby</text>
+<text class="county-label" x="637.9" y="297.5">Stark</text>
+<text class="county-label" x="607.5" y="224.2">Summit</text>
+<text class="county-label" x="744" y="176.8">Trumbull</text>
+<text class="county-label" x="619.6" y="385.7">Tuscarawas</text>
+<text class="county-label" x="278.3" y="419.6">Union</text>
+<text class="county-label" x="62.5" y="284.7">Van Wert</text>
+<text class="county-label" x="437.8" y="667.8">Vinton</text>
+<text class="county-label" x="131.3" y="623.7">Warren</text>
+<text class="county-label" x="618.2" y="618.7">Washington</text>
+<text class="county-label" x="544.6" y="294.8">Wayne</text>
+<text class="county-label" x="65.9" y="118.2">Williams</text>
+<text class="county-label" x="235.9" y="168.2">Wood</text>
+<text class="county-label" x="291.5" y="291.4">Wyandot</text>
+
+      </svg>
+      <div class="map-legend">
+        <span><span class="swatch" style="background:#f8d9a0"></span>Has opportunities</span>
+        <span><span class="swatch" style="background:var(--bgsu-orange)"></span>Selected</span>
+        <span><span class="swatch" style="background:var(--bgsu-seafoam)"></span>Search match</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="results-panel" aria-label="Service opportunities" aria-live="polite">
+    <div class="results-head">
+      <div>
+        <h2 id="resultsTitle">Service Opportunities</h2>
+        <p class="panel-sub" id="resultsSub">Select a county on the map, or search above, to get started.</p>
+      </div>
+      <button id="clearBtn" type="button">Clear &amp; view all</button>
+    </div>
+    <div class="results-list" id="resultsList">
+      <div class="loading-msg" id="loadingMsg">Loading opportunities&hellip;</div>
+    </div>
+
+    <div class="issues">
+      <h2>Service Issue Areas</h2>
+      <div class="chips" id="issueChips"></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <strong>Thompson Scholarship Programs</strong><br>
+  Bowling Green State University &middot; Bowling Green, Ohio
+</footer>
+
+<script>
+/* ============================================================
+   CONFIG — your Google Sheet.
+   The sheet must be shared as "Anyone with the link — Viewer".
+   Expected columns (any order, flexible names):
+   Volunteer Sites | Location (county, Ohio) | Service Area
+   ============================================================ */
+const SHEET_ID = '1BeRr3CDbz8lM7Ihh2Awu6CMh64KhQz6U_mFvqWnr8lo';
+const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID + '/gviz/tq?tqx=out:csv';
+
+/* From the Active Citizenship Continuum handout */
+const ISSUE_AREAS = [
+  'Animal Welfare','Children & Youth','Community Enrichment','Education',
+  'Environmentalism & Sustainability','Food & Basic Needs Security','Gender Equity',
+  'Housing & Homelessness','LGBTQ+','Public Health','Race, Ethnicity, and Diversity','Senior Welfare'
+];
+
+const COUNTY_NAMES = []; // filled below from the SVG
+let OPPORTUNITIES = [];  // {site, location, county, areas:[]}
+let selectedCounty = null;
+let activeIssue = null;
+
+/* ---------- tiny CSV parser (handles quoted commas) ---------- */
+function parseCSV(text){
+  const rows = []; let row = [], cur = '', inQ = false;
+  for (let i = 0; i < text.length; i++){
+    const c = text[i];
+    if (inQ){
+      if (c === '"' && text[i+1] === '"'){ cur += '"'; i++; }
+      else if (c === '"'){ inQ = false; }
+      else cur += c;
+    } else {
+      if (c === '"') inQ = true;
+      else if (c === ','){ row.push(cur); cur = ''; }
+      else if (c === '\n'){ row.push(cur); rows.push(row); row = []; cur = ''; }
+      else if (c !== '\r') cur += c;
+    }
+  }
+  if (cur.length || row.length){ row.push(cur); rows.push(row); }
+  return rows;
+}
+
+/* ---------- pull county name out of a Location cell ---------- */
+function extractCounty(location){
+  if (!location) return null;
+  const loc = location.toLowerCase();
+  return COUNTY_NAMES.find(n => {
+    const ln = n.toLowerCase();
+    return loc.includes(ln + ' county') || loc.split(/[,;]/).some(p => p.trim() === ln);
+  }) || COUNTY_NAMES.find(n => loc.includes(n.toLowerCase())) || null;
+}
+
+/* ---------- load the sheet ---------- */
+async function loadSheet(){
+  const list = document.getElementById('resultsList');
+  try{
+    const res = await fetch(SHEET_CSV_URL);
+    if (!res.ok) throw new Error('Sheet not reachable');
+    const rows = parseCSV(await res.text()).filter(r => r.some(c => c.trim()));
+    if (rows.length < 2){ renderIntro('empty-sheet'); return; }
+
+    const headers = rows[0].map(h => h.toLowerCase());
+    const col = key => headers.findIndex(h => h.includes(key));
+    const iSite = col('volunteer') !== -1 ? col('volunteer') : col('site');
+    const iLoc  = col('location');
+    const iArea = col('service');
+
+    OPPORTUNITIES = rows.slice(1).map(r => {
+      const site = (r[iSite] || '').trim();
+      const location = (r[iLoc] || '').trim();
+      const areasRaw = (r[iArea] || '').trim();
+      if (!site) return null;
+      return {
+        site, location,
+        county: extractCounty(location),
+        areas: areasRaw ? areasRaw.split(/[;,]/).map(a => a.trim()).filter(Boolean) : []
+      };
+    }).filter(Boolean).sort((a,b) => a.site.localeCompare(b.site));
+
+    markCountiesWithData();
+    renderIntro(OPPORTUNITIES.length ? 'ready' : 'empty-sheet');
+  } catch(e){
+    renderIntro('error');
+  }
+}
+
+function markCountiesWithData(){
+  document.querySelectorAll('.county').forEach(el => {
+    const has = OPPORTUNITIES.some(o => o.county === el.dataset.name);
+    el.classList.toggle('has-data', has);
+  });
+}
+
+/* ---------- rendering ---------- */
+function renderIntro(state){
+  const list = document.getElementById('resultsList');
+  const sub = document.getElementById('resultsSub');
+  if (state === 'ready'){
+    sub.textContent = 'Select a county on the map, or search above, to get started.';
+    list.innerHTML = '<div class="empty"><p>' + OPPORTUNITIES.length + ' opportunities across Ohio</p><p>Click your county to see what\u2019s nearby.</p></div>';
+  } else if (state === 'empty-sheet'){
+    sub.textContent = 'Opportunities are coming soon.';
+    list.innerHTML = '<div class="empty"><p>We\u2019re building this list right now</p><p>Check back soon \u2014 service opportunities for every Ohio county are on the way.</p></div>';
+  } else {
+    sub.textContent = '';
+    list.innerHTML = '<div class="empty"><p>We couldn\u2019t load the opportunity list</p><p>Make sure the Google Sheet is shared as \u201cAnyone with the link \u2014 Viewer,\u201d then refresh this page.</p></div>';
+  }
+}
+
+function cardHTML(o){
+  const tags = o.areas.map(a => '<span class="tag">' + escapeHTML(a) + '</span>').join('');
+  return '<article class="opp-card"><h3>' + escapeHTML(o.site) + '</h3>' +
+    (o.location ? '<p class="loc">' + escapeHTML(o.location) + '</p>' : '') +
+    (tags ? '<div class="tags">' + tags + '</div>' : '') + '</article>';
+}
+function escapeHTML(s){ return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function renderResults(){
+  const list = document.getElementById('resultsList');
+  const title = document.getElementById('resultsTitle');
+  const sub = document.getElementById('resultsSub');
+  const clearBtn = document.getElementById('clearBtn');
+
+  let items = OPPORTUNITIES;
+  let titleText = 'Service Opportunities';
+  let parts = [];
+
+  if (selectedCounty){
+    items = items.filter(o => o.county === selectedCounty);
+    titleText = selectedCounty + ' County';
+    parts.push(selectedCounty + ' County');
+  }
+  if (activeIssue){
+    items = items.filter(o => o.areas.some(a => a.toLowerCase().includes(activeIssue.toLowerCase())));
+    parts.push(activeIssue);
+  }
+
+  title.textContent = titleText;
+  clearBtn.style.display = (selectedCounty || activeIssue) ? 'inline' : 'none';
+
+  if (!selectedCounty && !activeIssue){ renderIntro(OPPORTUNITIES.length ? 'ready' : 'empty-sheet'); return; }
+
+  sub.textContent = items.length + (items.length === 1 ? ' opportunity' : ' opportunities') +
+    (parts.length ? ' \u00b7 ' + parts.join(' \u00b7 ') : '');
+
+  if (!items.length){
+    list.innerHTML = '<div class="empty"><p>Nothing listed here yet</p><p>We\u2019re adding opportunities all the time \u2014 check back soon, or explore a nearby county.</p></div>';
+  } else {
+    list.innerHTML = items.map(cardHTML).join('');
+  }
+}
+
+/* ---------- county selection ---------- */
+function selectCounty(name, scroll){
+  selectedCounty = (selectedCounty === name) ? null : name;
+  document.querySelectorAll('.county').forEach(el => {
+    el.classList.toggle('selected', el.dataset.name === selectedCounty);
+    el.setAttribute('aria-pressed', el.dataset.name === selectedCounty ? 'true' : 'false');
+  });
+  renderResults();
+  if (scroll && selectedCounty && window.innerWidth <= 880){
+    document.querySelector('.results-panel').scrollIntoView({behavior:'smooth', block:'start'});
+  }
+}
+
+function clearAll(){
+  selectedCounty = null; activeIssue = null;
+  document.querySelectorAll('.county').forEach(el => el.classList.remove('selected','match'));
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  document.getElementById('searchInput').value = '';
+  renderResults();
+}
+
+/* ---------- issue chips ---------- */
+function buildChips(){
+  const wrap = document.getElementById('issueChips');
+  ISSUE_AREAS.forEach(area => {
+    const b = document.createElement('button');
+    b.className = 'chip'; b.type = 'button'; b.textContent = area;
+    b.addEventListener('click', () => {
+      activeIssue = (activeIssue === area) ? null : area;
+      document.querySelectorAll('.chip').forEach(c => c.classList.toggle('active', c === b && activeIssue));
+      highlightIssueCounties();
+      renderResults();
+    });
+    wrap.appendChild(b);
+  });
+}
+function highlightIssueCounties(){
+  document.querySelectorAll('.county').forEach(el => {
+    const match = activeIssue && OPPORTUNITIES.some(o =>
+      o.county === el.dataset.name &&
+      o.areas.some(a => a.toLowerCase().includes(activeIssue.toLowerCase())));
+    el.classList.toggle('match', !!match);
+  });
+}
+
+/* ---------- search ---------- */
+function buildSearch(){
+  const input = document.getElementById('searchInput');
+  const box = document.getElementById('suggestions');
+
+  function results(q){
+    q = q.trim().toLowerCase();
+    if (!q) return [];
+    const out = [];
+    COUNTY_NAMES.filter(n => n.toLowerCase().includes(q))
+      .slice(0,6).forEach(n => out.push({kind:'county', label:n + ' County', value:n}));
+    ISSUE_AREAS.filter(a => a.toLowerCase().includes(q))
+      .slice(0,5).forEach(a => out.push({kind:'issue', label:a, value:a}));
+    OPPORTUNITIES.filter(o => o.site.toLowerCase().includes(q))
+      .slice(0,5).forEach(o => out.push({kind:'site', label:o.site, value:o}));
+    return out.slice(0,10);
+  }
+
+  function render(items){
+    box.innerHTML = '';
+    if (!items.length){ box.classList.remove('open'); return; }
+    items.forEach(it => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.setAttribute('role','option');
+      b.innerHTML = '<span class="kind ' + it.kind + '">' + (it.kind === 'site' ? 'org' : it.kind) + '</span>' + escapeHTML(it.label);
+      b.addEventListener('click', () => {
+        box.classList.remove('open');
+        if (it.kind === 'county'){ input.value = it.label; selectCounty(it.value, true); }
+        else if (it.kind === 'issue'){
+          input.value = it.label;
+          activeIssue = it.value;
+          document.querySelectorAll('.chip').forEach(c => c.classList.toggle('active', c.textContent === it.value));
+          highlightIssueCounties(); renderResults();
+        } else {
+          input.value = it.label;
+          if (it.value.county) selectCounty(it.value.county, true);
+        }
+      });
+      box.appendChild(b);
+    });
+    box.classList.add('open');
+  }
+
+  input.addEventListener('input', () => render(results(input.value)));
+  input.addEventListener('focus', () => render(results(input.value)));
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.search-wrap')) box.classList.remove('open');
+  });
+  input.addEventListener('keydown', e => { if (e.key === 'Escape') box.classList.remove('open'); });
+}
+
+/* ---------- wire up the map ---------- */
+function initMap(){
+  document.querySelectorAll('.county').forEach(el => {
+    COUNTY_NAMES.push(el.dataset.name);
+    el.setAttribute('role','button');
+    el.setAttribute('tabindex','0');
+    el.setAttribute('aria-pressed','false');
+    el.setAttribute('aria-label', el.dataset.name + ' County');
+    el.addEventListener('click', () => selectCounty(el.dataset.name, true));
+    el.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); selectCounty(el.dataset.name, true); }
+    });
+  });
+  COUNTY_NAMES.sort();
+}
+
+document.getElementById('clearBtn').addEventListener('click', clearAll);
+initMap();
+buildChips();
+buildSearch();
+loadSheet();
+</script>
+</body>
+</html>
